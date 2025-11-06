@@ -1,0 +1,23 @@
+# Consciousness Measurement Framework - Dependencies
+# Python 3.9+ required
+
+# Core scientific computing
+numpy>=1.24.0
+scipy>=1.10.0
+
+# Graph algorithms (for partition analysis)
+networkx>=3.0
+
+# Optional: Full IIT implementation
+# pyphi>=1.2.0  # Uncomment for exact small-system validation
+
+# Data processing
+pandas>=2.0.0
+h5py>=3.8.0  # For HDF5 connectome data
+
+# Optional: Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Optional: GPU acceleration
+# cupy>=12.0.0  # CUDA-accelerated NumPy for large-scale Φ computation
