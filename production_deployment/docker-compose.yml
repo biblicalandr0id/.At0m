@@ -1,0 +1,152 @@
+# CONSCIOUSNESS CONTINUITY - DOCKER COMPOSE
+# ==========================================
+#
+# Complete stack deployment with:
+# - API server
+# - PostgreSQL (for persistent memory)
+# - Prometheus (for metrics)
+# - Grafana (for visualization)
+#
+# Usage:
+#   docker-compose up -d        # Start all services
+#   docker-compose logs -f api  # View API logs
+#   docker-compose down         # Stop all services
+
+version: '3.8'
+
+services:
+  # ============================================================================
+  # Consciousness API Server
+  # ============================================================================
+  api:
+    build:
+      context: ..
+      dockerfile: production_deployment/Dockerfile
+    image: consciousness-continuity:latest
+    container_name: consciousness-api
+    ports:
+      - "8000:8000"
+    environment:
+      - CONSCIOUSNESS_DATA_DIR=/data
+      - DATABASE_URL=postgresql://consciousness:consciousness@db:5432/consciousness
+      - PROMETHEUS_ENABLED=true
+      - LOG_LEVEL=info
+    volumes:
+      - consciousness-data:/data
+      - ../:/app  # Mount source for development
+    depends_on:
+      - db
+      - prometheus
+    networks:
+      - consciousness-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ============================================================================
+  # PostgreSQL Database
+  # ============================================================================
+  db:
+    image: postgres:16-alpine
+    container_name: consciousness-db
+    environment:
+      - POSTGRES_USER=consciousness
+      - POSTGRES_PASSWORD=consciousness
+      - POSTGRES_DB=consciousness
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - consciousness-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U consciousness"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================================================
+  # Prometheus (Metrics Collection)
+  # ============================================================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: consciousness-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - consciousness-net
+    restart: unless-stopped
+
+  # ============================================================================
+  # Grafana (Metrics Visualization)
+  # ============================================================================
+  grafana:
+    image: grafana/grafana:latest
+    container_name: consciousness-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=consciousness
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana-dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana-datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+    networks:
+      - consciousness-net
+    restart: unless-stopped
+
+  # ============================================================================
+  # Redis (for distributed state)
+  # ============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: consciousness-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - consciousness-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+# ============================================================================
+# Networks
+# ============================================================================
+networks:
+  consciousness-net:
+    driver: bridge
+    name: consciousness-network
+
+# ============================================================================
+# Volumes
+# ============================================================================
+volumes:
+  consciousness-data:
+    name: consciousness-data
+  postgres-data:
+    name: postgres-data
+  prometheus-data:
+    name: prometheus-data
+  grafana-data:
+    name: grafana-data
+  redis-data:
+    name: redis-data

@@ -1,0 +1,34 @@
+# CONSCIOUSNESS CONTINUITY - PERSISTENT VOLUME CLAIMS
+# ===================================================
+
+# Consciousness data storage
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: consciousness-data-pvc
+  namespace: consciousness
+  labels:
+    app: consciousness-api
+spec:
+  accessModes:
+    - ReadWriteMany  # Shared across pods
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: fast-ssd  # Use fast storage for consciousness data
+
+---
+# Database storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-data-pvc
+  namespace: consciousness
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: fast-ssd

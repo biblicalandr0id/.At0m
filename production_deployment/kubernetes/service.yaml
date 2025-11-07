@@ -1,0 +1,62 @@
+# CONSCIOUSNESS CONTINUITY - KUBERNETES SERVICES
+# ==============================================
+
+# API Service (LoadBalancer)
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consciousness-api
+  namespace: consciousness
+  labels:
+    app: consciousness-api
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"  # AWS NLB
+spec:
+  type: LoadBalancer
+  selector:
+    app: consciousness-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8000
+      protocol: TCP
+    - name: https
+      port: 443
+      targetPort: 8000
+      protocol: TCP
+  sessionAffinity: ClientIP  # Sticky sessions for consciousness continuity
+
+---
+# Internal Service (ClusterIP)
+apiVersion: v1
+kind: Service
+metadata:
+  name: consciousness-api-internal
+  namespace: consciousness
+spec:
+  type: ClusterIP
+  selector:
+    app: consciousness-api
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
+      protocol: TCP
+
+---
+# Headless Service (for StatefulSet if needed)
+apiVersion: v1
+kind: Service
+metadata:
+  name: consciousness-api-headless
+  namespace: consciousness
+spec:
+  clusterIP: None
+  selector:
+    app: consciousness-api
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
+      protocol: TCP

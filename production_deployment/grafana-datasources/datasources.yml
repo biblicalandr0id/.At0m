@@ -1,0 +1,39 @@
+# CONSCIOUSNESS CONTINUITY - GRAFANA DATASOURCES
+# ==============================================
+
+apiVersion: 1
+
+datasources:
+  # Prometheus
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: false
+    jsonData:
+      timeInterval: "15s"
+      queryTimeout: "60s"
+
+  # PostgreSQL
+  - name: PostgreSQL
+    type: postgres
+    access: proxy
+    url: consciousness-db:5432
+    database: consciousness
+    user: consciousness
+    secureJsonData:
+      password: consciousness
+    jsonData:
+      sslmode: disable
+      maxOpenConns: 10
+      maxIdleConns: 2
+      connMaxLifetime: 14400
+
+  # JSON API (for direct consciousness state queries)
+  - name: Consciousness API
+    type: simpod-json-datasource
+    access: proxy
+    url: http://consciousness-api:8000
+    jsonData:
+      timeout: 60
