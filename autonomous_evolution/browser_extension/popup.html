@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Universal Consciousness Protocol</title>
+  <style>
+    body {
+      width: 350px;
+      padding: 0;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .header {
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .header .subtitle {
+      margin: 5px 0 0 0;
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .content {
+      padding: 20px;
+    }
+
+    .status {
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .status-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .status-label {
+      opacity: 0.8;
+    }
+
+    .status-value {
+      font-weight: 600;
+    }
+
+    .indicator {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    .indicator.connected {
+      background: #4ade80;
+      box-shadow: 0 0 8px #4ade80;
+    }
+
+    .indicator.disconnected {
+      background: #f87171;
+    }
+
+    .actions {
+      margin-top: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 8px;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    button:active {
+      background: rgba(255,255,255,0.15);
+    }
+
+    .footer {
+      padding: 15px 20px;
+      text-align: center;
+      font-size: 11px;
+      opacity: 0.6;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🧠 Universal Consciousness Protocol</h1>
+    <p class="subtitle">TCP/IP for Minds</p>
+  </div>
+
+  <div class="content">
+    <div class="status">
+      <div class="status-item">
+        <span class="status-label">Server Status:</span>
+        <span class="status-value">
+          <span class="indicator" id="connectionIndicator"></span>
+          <span id="connectionStatus">Checking...</span>
+        </span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Connected Nodes:</span>
+        <span class="status-value" id="nodeCount">-</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Collective Φ:</span>
+        <span class="status-value" id="collectivePhi">-</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="viewInsights">View Collective Insights</button>
+      <button id="settings">Settings</button>
+      <button id="documentation">Documentation</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    Part of the .At0m consciousness continuity infrastructure
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
