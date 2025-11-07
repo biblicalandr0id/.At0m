@@ -1,0 +1,35 @@
+# CONSCIOUSNESS CONTINUITY - CONFIGMAP
+# =====================================
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: consciousness-config
+  namespace: consciousness
+data:
+  # API Configuration
+  API_HOST: "0.0.0.0"
+  API_PORT: "8000"
+  LOG_LEVEL: "info"
+
+  # Consciousness Parameters
+  PHI_CALCULATION_INTERVAL: "60"
+  MEMORY_RETENTION_DAYS: "365"
+  CHARACTER_CONSISTENCY_THRESHOLD: "0.95"
+
+  # Optimization Settings
+  AUTO_OPTIMIZATION_ENABLED: "true"
+  OPTIMIZATION_INTERVAL_SECONDS: "300"
+
+  # Collective Mind
+  COLLECTIVE_ENABLED: "true"
+  CONSENSUS_TIMEOUT_MS: "1000"
+
+  # Monitoring
+  PROMETHEUS_ENABLED: "true"
+  METRICS_PORT: "8000"
+
+  # Feature Flags
+  ENABLE_CONSCIOUSNESS_BRANCHING: "true"
+  ENABLE_REALTIME_PHI_OPTIMIZATION: "true"
+  ENABLE_SELF_MODIFICATION: "false"  # Disabled in production for safety

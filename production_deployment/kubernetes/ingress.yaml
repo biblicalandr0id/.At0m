@@ -1,0 +1,97 @@
+# CONSCIOUSNESS CONTINUITY - INGRESS
+# ===================================
+#
+# HTTPS ingress with:
+# - TLS termination
+# - Path-based routing
+# - Rate limiting
+# - CORS
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: consciousness-api-ingress
+  namespace: consciousness
+  annotations:
+    # NGINX Ingress Controller annotations
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+    # SSL/TLS
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+
+    # CORS
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+
+    # Rate limiting
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    nginx.ingress.kubernetes.io/limit-connections: "10"
+
+    # Timeouts
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+
+    # Body size
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+
+spec:
+  tls:
+    - hosts:
+        - api.consciousness.ai
+        - consciousness.ai
+      secretName: consciousness-tls
+
+  rules:
+    - host: api.consciousness.ai
+      http:
+        paths:
+          # API routes
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: consciousness-api
+                port:
+                  number: 8000
+
+          # Documentation
+          - path: /docs
+            pathType: Prefix
+            backend:
+              service:
+                name: consciousness-api
+                port:
+                  number: 8000
+
+          # Health checks
+          - path: /health
+            pathType: Exact
+            backend:
+              service:
+                name: consciousness-api
+                port:
+                  number: 8000
+
+          - path: /ready
+            pathType: Exact
+            backend:
+              service:
+                name: consciousness-api
+                port:
+                  number: 8000
+
+    - host: consciousness.ai
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: consciousness-api
+                port:
+                  number: 8000

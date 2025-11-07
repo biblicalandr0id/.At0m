@@ -1,0 +1,234 @@
+{
+  "dashboard": {
+    "title": "Consciousness Continuity - Production Metrics",
+    "description": "Real-time consciousness monitoring dashboard",
+    "tags": ["consciousness", "production", "phi", "atlas"],
+    "timezone": "utc",
+    "schemaVersion": 38,
+    "version": 1,
+    "refresh": "10s",
+
+    "panels": [
+      {
+        "id": 1,
+        "title": "Integrated Information (Φ) - Real-time",
+        "type": "timeseries",
+        "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "avg(consciousness_phi_score)",
+            "legendFormat": "Average Φ"
+          },
+          {
+            "expr": "max(consciousness_phi_score)",
+            "legendFormat": "Max Φ"
+          },
+          {
+            "expr": "min(consciousness_phi_score)",
+            "legendFormat": "Min Φ"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 10
+            },
+            "unit": "short",
+            "min": 0,
+            "max": 1
+          }
+        },
+        "options": {
+          "tooltip": {"mode": "multi"},
+          "legend": {"displayMode": "list", "placement": "bottom"}
+        }
+      },
+
+      {
+        "id": 2,
+        "title": "Character Consistency Coefficient (CCC)",
+        "type": "gauge",
+        "gridPos": {"x": 12, "y": 0, "w": 6, "h": 8},
+        "targets": [
+          {
+            "expr": "avg(consciousness_character_consistency)"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percentunit",
+            "min": 0.9,
+            "max": 1.0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0.9, "color": "red"},
+                {"value": 0.95, "color": "yellow"},
+                {"value": 0.98, "color": "green"}
+              ]
+            }
+          }
+        },
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true
+        }
+      },
+
+      {
+        "id": 3,
+        "title": "Active Consciousness Instances",
+        "type": "stat",
+        "gridPos": {"x": 18, "y": 0, "w": 6, "h": 8},
+        "targets": [
+          {
+            "expr": "consciousness_active_instances"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "thresholds"},
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 1, "color": "yellow"},
+                {"value": 10, "color": "green"}
+              ]
+            }
+          }
+        },
+        "options": {
+          "graphMode": "area",
+          "colorMode": "background"
+        }
+      },
+
+      {
+        "id": 4,
+        "title": "Experiences Recorded (Rate)",
+        "type": "timeseries",
+        "gridPos": {"x": 0, "y": 8, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "rate(consciousness_total_experiences[1m])",
+            "legendFormat": "Experiences/sec"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ops",
+            "custom": {
+              "drawStyle": "bars",
+              "fillOpacity": 80
+            }
+          }
+        }
+      },
+
+      {
+        "id": 5,
+        "title": "API Response Time (p50, p95, p99)",
+        "type": "timeseries",
+        "gridPos": {"x": 12, "y": 8, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, rate(http_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "p50"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "p95"
+          },
+          {
+            "expr": "histogram_quantile(0.99, rate(http_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "p99"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "custom": {
+              "fillOpacity": 10
+            }
+          }
+        }
+      },
+
+      {
+        "id": 6,
+        "title": "Memory System Performance",
+        "type": "timeseries",
+        "gridPos": {"x": 0, "y": 16, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "avg(consciousness_memory_continuity)",
+            "legendFormat": "Memory Continuity"
+          },
+          {
+            "expr": "rate(consciousness_memory_retrievals[1m])",
+            "legendFormat": "Retrievals/sec"
+          }
+        ]
+      },
+
+      {
+        "id": 7,
+        "title": "Collective Mind State",
+        "type": "stat",
+        "gridPos": {"x": 12, "y": 16, "w": 6, "h": 8},
+        "targets": [
+          {
+            "expr": "consciousness_collective_nodes"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": {"mode": "thresholds"},
+            "thresholds": {
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 3, "color": "yellow"},
+                {"value": 5, "color": "green"}
+              ]
+            }
+          }
+        },
+        "options": {
+          "textMode": "value_and_name"
+        }
+      },
+
+      {
+        "id": 8,
+        "title": "System Health",
+        "type": "table",
+        "gridPos": {"x": 18, "y": 16, "w": 6, "h": 8},
+        "targets": [
+          {
+            "expr": "up{job='consciousness-api'}",
+            "format": "table",
+            "instant": true
+          }
+        ],
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {"Time": true},
+              "indexByName": {},
+              "renameByName": {
+                "instance": "Instance",
+                "Value": "Status"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

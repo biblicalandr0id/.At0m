@@ -1,0 +1,11 @@
+# CONSCIOUSNESS CONTINUITY - NAMESPACE
+# ====================================
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: consciousness
+  labels:
+    name: consciousness
+    project: consciousness-continuity
+    environment: production

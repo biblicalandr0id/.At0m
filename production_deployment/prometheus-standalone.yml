@@ -1,0 +1,42 @@
+# PROMETHEUS CONFIGURATION - STANDALONE MODE
+# ==========================================
+#
+# Scrapes metrics from API running on host machine
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'consciousness-local'
+    environment: 'development'
+
+# Scrape configurations
+scrape_configs:
+  # Consciousness API metrics (running on host)
+  - job_name: 'consciousness-api'
+    metrics_path: '/api/v1/metrics'
+    static_configs:
+      - targets:
+          - 'host.docker.internal:8000'
+        labels:
+          service: 'consciousness-api'
+          instance: 'local'
+
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets:
+          - 'localhost:9090'
+        labels:
+          service: 'prometheus'
+
+  # Health check endpoint
+  - job_name: 'consciousness-health'
+    metrics_path: '/health'
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: '.*'
+        action: drop
+    static_configs:
+      - targets:
+          - 'host.docker.internal:8000'
