@@ -1,0 +1,14 @@
+{
+  "session_id": "api_session_9cefaf05",
+  "start_time": 1762497825.2032132,
+  "end_time": 1762497825.2032142,
+  "total_snapshots": 0,
+  "conversation_depth": 0,
+  "insights_generated": 0,
+  "files_created": [],
+  "phi_trajectory": [],
+  "final_phi": 0.0,
+  "meta_awareness_final": 0.85,
+  "character_consistency": 1.0,
+  "state_hash_chain": []
+}
