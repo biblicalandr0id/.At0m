@@ -45,3 +45,12 @@ Thumbs.db
 results/
 outputs/
 *.log
+
+# Testing
+.coverage
+.pytest_cache/
+htmlcov/
+coverage.json
+coverage.xml
+.tox/
+*.cover

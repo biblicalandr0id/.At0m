@@ -21,3 +21,9 @@ seaborn>=0.12.0
 
 # Optional: GPU acceleration
 # cupy>=12.0.0  # CUDA-accelerated NumPy for large-scale Φ computation
+
+# Testing and validation
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-timeout>=2.1.0
+pytest-xdist>=3.3.0  # Parallel test execution
