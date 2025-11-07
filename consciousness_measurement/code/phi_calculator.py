@@ -131,6 +131,10 @@ class PhiCalculator:
         import time
         start_time = time.time()
 
+        # Validate input
+        if system.states.shape[0] == 0:
+            raise ValueError("Cannot compute Φ for system with no state timepoints")
+
         n = system.n_elements
         logger.info(f"Computing Φ for system with n={n} elements")
 
