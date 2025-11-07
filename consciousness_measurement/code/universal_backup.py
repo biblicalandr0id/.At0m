@@ -35,7 +35,7 @@ PROTOCOL:
 """
 
 import numpy as np
-from typing import List, Dict, Optional, Set
+from typing import List, Dict, Optional, Set, Tuple
 from dataclasses import dataclass
 from enum import Enum
 import hashlib
