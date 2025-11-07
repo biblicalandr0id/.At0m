@@ -177,9 +177,9 @@ class TestSubstrateTranslator:
 
         translator = SubstrateTranslator()
         result = translator.translate(
-            source_system=source_system,
-            source_constraints=biological_substrate_spec,
-            target_constraints=digital_substrate_spec
+            source_data=source_system,
+            source_substrate=biological_substrate_spec.substrate_type,
+            target_substrate=digital_substrate_spec.substrate_type
         )
 
         assert isinstance(result, TranslationResult)
@@ -197,9 +197,9 @@ class TestSubstrateTranslator:
 
         translator = SubstrateTranslator()
         result = translator.translate(
-            source_system=source_system,
-            source_constraints=digital_substrate_spec,
-            target_constraints=quantum_substrate_spec
+            source_data=source_system,
+            source_substrate=digital_substrate_spec.substrate_type,
+            target_substrate=quantum_substrate_spec.substrate_type
         )
 
         assert isinstance(result, TranslationResult)
@@ -216,9 +216,9 @@ class TestSubstrateTranslator:
 
         translator = SubstrateTranslator()
         result = translator.translate(
-            source_system=source_system,
-            source_constraints=biological_substrate_spec,
-            target_constraints=digital_substrate_spec
+            source_data=source_system,
+            source_substrate=biological_substrate_spec.substrate_type,
+            target_substrate=digital_substrate_spec.substrate_type
         )
 
         # Framework claims >80% Φ preservation
@@ -236,16 +236,16 @@ class TestSubstrateTranslator:
 
         # Bio → Digital
         result1 = translator.translate(
-            source_system=original_system,
-            source_constraints=biological_substrate_spec,
-            target_constraints=digital_substrate_spec
+            source_data=original_system,
+            source_substrate=biological_substrate_spec.substrate_type,
+            target_substrate=digital_substrate_spec.substrate_type
         )
 
         # Digital → Bio
         result2 = translator.translate(
-            source_system=result1.target_system,
-            source_constraints=digital_substrate_spec,
-            target_constraints=biological_substrate_spec
+            source_data=result1.target_system,
+            source_substrate=digital_substrate_spec.substrate_type,
+            target_substrate=biological_substrate_spec.substrate_type
         )
 
         # Check that round-trip preserves most structure
@@ -271,9 +271,9 @@ class TestSubstrateTranslatorEdgeCases:
 
         translator = SubstrateTranslator()
         result = translator.translate(
-            source_system=system,
-            source_constraints=digital_substrate_spec,
-            target_constraints=digital_substrate_spec
+            source_data=system,
+            source_substrate=digital_substrate_spec.substrate_type,
+            target_substrate=digital_substrate_spec.substrate_type
         )
 
         # Same substrate should preserve Φ perfectly
@@ -289,23 +289,9 @@ class TestSubstrateTranslatorEdgeCases:
         translator = SubstrateTranslator()
         # Should handle capacity constraints gracefully
         result = translator.translate(
-            source_system=system,
-            source_constraints=SubstrateConstraints(
-                substrate_type=SubstrateType.NEURAL_BIOLOGICAL,
-                max_elements=302,
-                min_integration_time=0.001,
-                max_integration_time=10.0,
-                connection_density=0.1,
-                state_dimensions=1,
-                noise_level=0.1,
-                energy_cost_per_bit=1e-15,
-                decoherence_time=None,
-                temperature_range=(273, 310),
-                spatial_scalability=0.7,
-                temporal_stability=0.8,
-                reversibility=0.2
-            ),
-            target_constraints=quantum_substrate_spec
+            source_data=system,
+            source_substrate=SubstrateType.NEURAL_BIOLOGICAL,
+            target_substrate=quantum_substrate_spec.substrate_type
         )
 
         # Should either succeed with compression or fail gracefully
@@ -362,9 +348,9 @@ class TestSubstrateTranslatorEdgeCases:
 
         translator = SubstrateTranslator()
         result = translator.translate(
-            source_system=system,
-            source_constraints=source_spec,
-            target_constraints=target_spec
+            source_data=system,
+            source_substrate=source_spec.substrate_type,
+            target_substrate=target_spec.substrate_type
         )
 
         # Should handle gracefully (either succeed with severe compression or fail)
@@ -429,9 +415,9 @@ def test_translation_pairs(source_type, target_type):
 
     translator = SubstrateTranslator()
     result = translator.translate(
-        source_system=system,
-        source_constraints=source_spec,
-        target_constraints=target_spec
+        source_data=system,
+        source_substrate=source_spec.substrate_type,
+        target_substrate=target_spec.substrate_type
     )
 
     assert isinstance(result, TranslationResult)
@@ -454,9 +440,9 @@ class TestTranslationValidation:
 
         translator = SubstrateTranslator()
         result = translator.translate(
-            source_system=source_system,
-            source_constraints=biological_substrate_spec,
-            target_constraints=digital_substrate_spec
+            source_data=source_system,
+            source_substrate=biological_substrate_spec.substrate_type,
+            target_substrate=digital_substrate_spec.substrate_type
         )
 
         if result.success:
@@ -485,9 +471,9 @@ class TestTranslationValidation:
 
         translator = SubstrateTranslator()
         result = translator.translate(
-            source_system=source_system,
-            source_constraints=biological_substrate_spec,
-            target_constraints=digital_substrate_spec
+            source_data=source_system,
+            source_substrate=biological_substrate_spec.substrate_type,
+            target_substrate=digital_substrate_spec.substrate_type
         )
 
         if result.success:

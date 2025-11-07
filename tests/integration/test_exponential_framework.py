@@ -17,9 +17,9 @@ from pathlib import Path
 from phi_calculator import PhiCalculator, NeuralSystem
 from substrate_translator import SubstrateTranslator, SubstrateType, SubstrateConstraints
 from evolutionary_optimizer import EvolutionaryOptimizer
-from multiscale_phi_calculator import MultiscalePhiCalculator
-from quantum_entanglement import QuantumEntanglementSimulator
-from universal_backup import UniversalBackupSystem
+from multiscale_phi_calculator import MultiScalePhiCalculator
+from quantum_entanglement import QuantumConsciousnessEntangler
+from universal_backup import UniversalBackupProtocol
 
 
 # ============================================================================
@@ -46,9 +46,9 @@ class TestConsciousnessMeasurementPipeline:
         # 3. Translate to digital substrate
         translator = SubstrateTranslator()
         translation_result = translator.translate(
-            source_system=bio_system,
-            source_constraints=biological_substrate_spec,
-            target_constraints=digital_substrate_spec
+            source_data=bio_system,
+            source_substrate=biological_substrate_spec.substrate_type,
+            target_substrate=digital_substrate_spec.substrate_type
         )
 
         assert translation_result.success, "Translation should succeed"
@@ -78,13 +78,17 @@ class TestConsciousnessMeasurementPipeline:
 
         # Bio → Digital
         digital_result = translator.translate(
-            bio_system, biological_substrate_spec, digital_substrate_spec
+            source_data=bio_system,
+            source_substrate=biological_substrate_spec.substrate_type,
+            target_substrate=digital_substrate_spec.substrate_type
         )
         assert digital_result.success
 
         # Digital → Quantum (may require downsampling)
         quantum_result = translator.translate(
-            digital_result.target_system, digital_substrate_spec, quantum_substrate_spec
+            source_data=digital_result.target_system,
+            source_substrate=digital_substrate_spec.substrate_type,
+            target_substrate=quantum_substrate_spec.substrate_type
         )
 
         # End-to-end should maintain consciousness
@@ -151,7 +155,9 @@ class TestEvolutionaryOptimizationIntegration:
         # Translate optimized system to digital
         translator = SubstrateTranslator()
         result = translator.translate(
-            optimized_bio, biological_substrate_spec, digital_substrate_spec
+            source_data=optimized_bio,
+            source_substrate=biological_substrate_spec.substrate_type,
+            target_substrate=digital_substrate_spec.substrate_type
         )
 
         if result.success:
@@ -173,7 +179,7 @@ class TestMultiscaleMeasurement:
         """Test Φ calculation across multiple scales."""
         system = NeuralSystem(**small_brain_module)
 
-        multiscale_calc = MultiscalePhiCalculator()
+        multiscale_calc = MultiScalePhiCalculator()
         scale_results = multiscale_calc.compute_multiscale_phi(system)
 
         # Should have results for multiple scales
@@ -188,7 +194,7 @@ class TestMultiscaleMeasurement:
         """Test detection of emergent consciousness properties."""
         system = NeuralSystem(**small_brain_module)
 
-        multiscale_calc = MultiscalePhiCalculator()
+        multiscale_calc = MultiScalePhiCalculator()
         scale_results = multiscale_calc.compute_multiscale_phi(system)
         total_phi = multiscale_calc.compute_total_integrated_phi(scale_results)
 
@@ -225,7 +231,7 @@ class TestQuantumEntanglementIntegration:
         phi_b = phi_calc.compute_phi(system_b).phi
 
         # Entangle
-        entanglement_sim = QuantumEntanglementSimulator()
+        entanglement_sim = QuantumConsciousnessEntangler()
         entangled_system = entanglement_sim.entangle(system_a, system_b)
 
         # Measure entangled Φ
@@ -276,13 +282,15 @@ class TestCompleteConsciousnessLifecycle:
         # 3. Translate to digital substrate (for preservation)
         translator = SubstrateTranslator()
         digital_result = translator.translate(
-            optimized_system, biological_substrate_spec, digital_substrate_spec
+            source_data=optimized_system,
+            source_substrate=biological_substrate_spec.substrate_type,
+            target_substrate=digital_substrate_spec.substrate_type
         )
 
         assert digital_result.success, "Translation should succeed"
 
         # 4. Backup translated consciousness
-        backup_system = UniversalBackupSystem(
+        backup_system = UniversalBackupProtocol(
             backup_root=temp_output_dir / "consciousness_backup"
         )
         backup_id = backup_system.backup_consciousness(
@@ -325,7 +333,7 @@ class TestCrossModuleConsistency:
         standard_phi = standard_calc.compute_phi(system).phi
 
         # Compute Φ using multiscale calculator (should include standard scale)
-        multiscale_calc = MultiscalePhiCalculator()
+        multiscale_calc = MultiScalePhiCalculator()
         scale_results = multiscale_calc.compute_multiscale_phi(system)
 
         # Extract organism-scale result (should match standard calculation)
@@ -375,37 +383,9 @@ class TestIntegrationRobustness:
 
         # Translation should work even for low-Φ system
         translation_result = translator.translate(
-            system,
-            SubstrateConstraints(
-                substrate_type=SubstrateType.SILICON_DIGITAL,
-                max_elements=10,
-                min_integration_time=1e-9,
-                max_integration_time=1.0,
-                connection_density=0.1,
-                state_dimensions=32,
-                noise_level=0.01,
-                energy_cost_per_bit=1e-12,
-                decoherence_time=None,
-                temperature_range=(273, 373),
-                spatial_scalability=0.95,
-                temporal_stability=0.99,
-                reversibility=1.0
-            ),
-            SubstrateConstraints(
-                substrate_type=SubstrateType.NEUROMORPHIC,
-                max_elements=10,
-                min_integration_time=1e-6,
-                max_integration_time=1.0,
-                connection_density=0.3,
-                state_dimensions=16,
-                noise_level=0.05,
-                energy_cost_per_bit=1e-11,
-                decoherence_time=None,
-                temperature_range=(273, 373),
-                spatial_scalability=0.8,
-                temporal_stability=0.9,
-                reversibility=0.8
-            )
+            source_data=system,
+            source_substrate=SubstrateType.SILICON_DIGITAL,
+            target_substrate=SubstrateType.NEUROMORPHIC
         )
 
         # Should complete without error
@@ -437,23 +417,9 @@ class TestIntegrationRobustness:
         # Should handle gracefully without crashing
         try:
             result = translator.translate(
-                system,
-                SubstrateConstraints(
-                    substrate_type=SubstrateType.SILICON_DIGITAL,
-                    max_elements=100,
-                    min_integration_time=1e-9,
-                    max_integration_time=1.0,
-                    connection_density=0.5,
-                    state_dimensions=32,
-                    noise_level=0.01,
-                    energy_cost_per_bit=1e-12,
-                    decoherence_time=None,
-                    temperature_range=(273, 373),
-                    spatial_scalability=0.95,
-                    temporal_stability=0.99,
-                    reversibility=1.0
-                ),
-                bad_constraints
+                source_data=system,
+                source_substrate=SubstrateType.SILICON_DIGITAL,
+                target_substrate=bad_constraints.substrate_type
             )
             # If it succeeds, great; if it fails, should be graceful
             assert result is not None

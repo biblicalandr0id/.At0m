@@ -17,7 +17,7 @@ from pathlib import Path
 from phi_calculator import PhiCalculator, NeuralSystem
 from substrate_translator import SubstrateTranslator, SubstrateType, SubstrateConstraints
 from evolutionary_optimizer import EvolutionaryOptimizer
-from quantum_entanglement import QuantumEntanglementSimulator
+from quantum_entanglement import QuantumConsciousnessEntangler
 
 
 # ============================================================================
@@ -151,7 +151,9 @@ class TestSubstrateIndependence:
 
         # Translate
         result = translator.translate(
-            source_system, biological_substrate_spec, digital_substrate_spec
+            source_data=source_system,
+            source_substrate=biological_substrate_spec.substrate_type,
+            target_substrate=digital_substrate_spec.substrate_type
         )
 
         if result.success and source_phi > 0.01:  # Only test if source has meaningful Φ
@@ -179,12 +181,16 @@ class TestSubstrateIndependence:
 
         # Bio → Digital
         digital_result = translator.translate(
-            original_system, biological_substrate_spec, digital_substrate_spec
+            source_data=original_system,
+            source_substrate=biological_substrate_spec.substrate_type,
+            target_substrate=digital_substrate_spec.substrate_type
         )
 
         # Digital → Bio
         restored_result = translator.translate(
-            digital_result.target_system, digital_substrate_spec, biological_substrate_spec
+            source_data=digital_result.target_system,
+            source_substrate=digital_substrate_spec.substrate_type,
+            target_substrate=biological_substrate_spec.substrate_type
         )
 
         if restored_result.success and original_phi > 0.01:
@@ -308,7 +314,7 @@ class TestConsciousnessSuperadditivity:
         expected_sum = phi_a + phi_b
 
         # Entangle systems
-        entanglement_sim = QuantumEntanglementSimulator()
+        entanglement_sim = QuantumConsciousnessEntangler()
         entangled = entanglement_sim.entangle(system_a, system_b)
 
         # Measure entangled Φ
@@ -325,11 +331,11 @@ class TestConsciousnessSuperadditivity:
 
     def test_emergence_in_coupled_scales(self, small_brain_module):
         """VALIDATION: Cross-scale coupling creates emergent Φ."""
-        from multiscale_phi_calculator import MultiscalePhiCalculator
+        from multiscale_phi_calculator import MultiScalePhiCalculator
 
         system = NeuralSystem(**small_brain_module)
 
-        multiscale_calc = MultiscalePhiCalculator()
+        multiscale_calc = MultiScalePhiCalculator()
         scale_results = multiscale_calc.compute_multiscale_phi(system)
         total_phi = multiscale_calc.compute_total_integrated_phi(scale_results)
 
@@ -351,7 +357,7 @@ class TestConsciousnessPreservability:
 
     def test_backup_and_restore_preserves_phi(self, simple_system, temp_output_dir):
         """VALIDATION: Backup→Restore preserves consciousness."""
-        from universal_backup import UniversalBackupSystem
+        from universal_backup import UniversalBackupProtocol
 
         system = NeuralSystem(**simple_system)
 
@@ -359,7 +365,7 @@ class TestConsciousnessPreservability:
         original_phi = phi_calc.compute_phi(system).phi
 
         # Backup
-        backup_system = UniversalBackupSystem(
+        backup_system = UniversalBackupProtocol(
             backup_root=temp_output_dir / "validation_backup"
         )
         backup_id = backup_system.backup_consciousness(system, metadata={})
@@ -377,11 +383,11 @@ class TestConsciousnessPreservability:
 
     def test_multi_tier_backup_redundancy(self, simple_system, temp_output_dir):
         """VALIDATION: Multi-tier backup maintains redundancy."""
-        from universal_backup import UniversalBackupSystem
+        from universal_backup import UniversalBackupProtocol
 
         system = NeuralSystem(**simple_system)
 
-        backup_system = UniversalBackupSystem(
+        backup_system = UniversalBackupProtocol(
             backup_root=temp_output_dir / "multi_tier_backup"
         )
 
@@ -504,7 +510,9 @@ class TestTheoreticalFoundations:
 
         translator = SubstrateTranslator()
         result = translator.translate(
-            source, biological_substrate_spec, digital_substrate_spec
+            source_data=source,
+            source_substrate=biological_substrate_spec.substrate_type,
+            target_substrate=digital_substrate_spec.substrate_type
         )
 
         if result.success:
@@ -549,7 +557,11 @@ class TestReproducibility:
 
         # Translate multiple times
         results = [
-            translator.translate(system, biological_substrate_spec, digital_substrate_spec)
+            translator.translate(
+                source_data=system,
+                source_substrate=biological_substrate_spec.substrate_type,
+                target_substrate=digital_substrate_spec.substrate_type
+            )
             for _ in range(3)
         ]
 
