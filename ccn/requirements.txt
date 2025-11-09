@@ -1,0 +1,15 @@
+# CCN Infrastructure Requirements
+# =================================
+
+# Database
+asyncpg>=0.29.0        # Async PostgreSQL driver
+psycopg2-binary>=2.9.9 # PostgreSQL adapter (for sync operations)
+
+# Consensus
+etcd3>=0.12.0          # etcd client for RAFT consensus
+
+# Scientific computing
+numpy>=1.24.0          # For median computation in consensus
+
+# Async utilities
+asyncio-mqtt>=0.16.1   # If needed for future messaging
